@@ -1,0 +1,13 @@
+{
+	"mesh_url": "https://meshcentral.com/",
+	"mesh_username": "mesh_username",
+	"save_password": true,
+	"ssh": "C:\\Program Files\\PuTTY\\putty.exe",
+	"sftp": "C:\\Program Files\\FileZilla FTP Client\\filezilla.exe",
+	"rdp": "C:\\Windows\\System32\\mstsc.exe",
+	"use_proxy": true,
+	"proxy_type": "socks",
+	"proxy_host": "10.1.192.48",
+	"proxy_port": "1080",
+	"mesh_passwordb64": "bWVzaF9wYXNzd29yZA=="
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Meshcentral 2 Router</title>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/photon.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Electron Javascript -->
+  <script src="app.js" charset="utf-8"></script>
+</head>
+
+<body onload="onload_handler()">
+  <!-- Wrap your entire app inside .window -->
+  <div class="window">
+    <!-- .toolbar-header sits at the top of your app -->
+    <header class="toolbar toolbar-header">
+      <h1 class="title">Meshcentral 2 Router</h1>
+      <div class="toolbar-actions">
+        <div class="btn-group pull-right">
+          <!--
+          <button class="btn btn-default" onclick="setPanel(1)">
+            <span class="icon icon-home"></span>
+          </button>
+          -->
+          <button class="btn btn-default" onclick="setPanel(2)">
+            <span class="icon icon-tools"></span>
+          </button>
+          <button class="btn btn-default" onclick="window.close()">
+            <span class="icon icon-logout"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Your app's content goes inside .window-content -->
+    <div id="panel1" class="window-content">
+      <div class="padded-more" style="width: 100%;">
+        <h1 class="text-center">Meshcentral 2 Router</h1>
+        <div class="form-group">
+          <label for="ServerUrl">Server URL</label>
+          <input id="ServerUrl" name="mesh_url" type="text" class="form-control">          
+        </div>
+        <div class="form-group">
+          <label for="ServerUser">Username</label>
+          <input id="ServerUser" name="mesh_username" type="text" class="form-control" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <label for="ServerPassword">Password</label>
+          <input id="ServerPassword" name="mesh_password" type="password" class="form-control" placeholder="Password">
+        </div>
+        <div class="form-group">
+          <label><input id="savepass" name="save_password" type='checkbox'> Save password in configuration</label>
+        </div>
+        <button class="btn btn-default pull-right" onclick="performLogin()">
+          <span class="icon icon-login"></span>&nbsp;&nbsp;Login
+        </button>
+      </div>
+    </div>
+
+    <div id="panel2" class="window-content" style="display: none;">
+      <div class="padded-more" style="width: 100%;">
+        <h1 class="text-center">Settings</h1>
+        <div class="form-group">
+          <label><input type="checkbox" name="use_proxy" onchange="useProxyChanged()"> Use Proxy</label><br/>
+          <label>Type: </label>
+          <label><input type="radio" name="proxy_type" value="http" checked> HTTP</label>
+          <label><input type="radio" name="proxy_type" value="socks"> SOCKS</label>
+          <br/>
+          <label>Proxy 
+          <input type="input" id="proxy_host" name="proxy_host" size='25' disabled><input type="input" name="proxy_port" size='5' disabled>&nbsp;
+          <button class="btn btn-default" onClick='resolveProxyIP()'>
+            <span class="icon icon-arrows-ccw"></span>&nbsp;&nbsp;Resolve
+          </button>          
+          </label>
+          <br/>
+          <table class="table-striped">
+            <thead>
+              <tr>
+                <th>Utility</th>
+                <th>Path</th>
+                <th>Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SSH (Putty)</td>
+                <td><input type="input" name="ssh" size='25' readonly><input type='file' name='ssh_file' id='ssh_file' onchange="updateSshInput()" style="display:none;"></td>
+                <td><input type="button" value="..." onClick="Q('ssh_file').click();"></td>
+              </tr>
+              <tr>
+                <td>SFTP (FileZilla)</td>
+                <td><input type="input" name="sftp" size='25' readonly><input type='file' name='sftp_file' id='sftp_file' onchange="updateSftpInput()" style="display:none;"></td>
+                <td><input type="button" value="..." onClick="Q('sftp_file').click();"></td>
+              </tr>
+              <tr>
+                <td>RDP (MSTSC)</td>
+                <td><input type="input" name="rdp" size='25' readonly><input type='file' name='rdp_file' id='rdp_file' onchange="updateRdpInput()" style="display:none;"></td>
+                <td><input type="button" value="..." onClick="Q('rdp_file').click();"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="btn-group pull-right">
+          <button class="btn btn-default" onclick="setPanel(1)">
+            <span class="icon icon-cancel"></span>&nbsp;&nbsp;Exit
+          </button>
+          <button class="btn btn-default" onclick="loadConfig()">
+            <span class="icon icon-arrows-ccw"></span>&nbsp;&nbsp;Reload
+          </button>
+          <button class="btn btn-default" onclick="saveConfig()">
+            <span class="icon icon-floppy"></span>&nbsp;&nbsp;Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel3" class="window-content" style="display: none;">
+      <div class="padded-more" style="width: 100%;">
+        <h1 class="text-center">Please wait...</h1>        
+      </div>
+    </div>
+
+    <div id="panel4" class="window-content" style="display: none;">
+      <div class="padded-more" style="width: 100%;">
+        <h1 class="text-center">Manage devices</h1>
+        <div class="form-group">
+          Mesh: <select id='select_mesh' class='form-control' style='width: 250px;'
+            onchange="meshChanged(this)"></select>&nbsp;
+            <button class='btn btn-default'onclick="loadMeshes()">
+              <span class="icon icon-arrows-ccw"></span>&nbsp;&nbsp;Reload
+            </button><br />
+        </div>
+        <div class="form-group">
+          <input type=text id='nsearch' name="nsearch" class="form-control" size=35 placeholder="Search nodes"
+            onkeyup="nsearchInputChanged()">
+          <div id="select_node_div" style="width:100%;height:100px; overflow-y:scroll">
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="checkbox" id="cb_relay" onchange="toggleRemoteIP()" style='vertical-align: middle; margin-top: -1px;'>&nbsp;&nbsp;Relay to other device <input type="text"
+            class='form-control' id="remote_ip" placeholder="IP Address" style="width:200px; display: none;">
+        </div>
+        <div class="form-group">
+          Remote Username: <input type="text" id="remote_username" class="form-control" style='width:200px;'
+            placeholder="Remote Username">
+        </div>
+        <div class="btn-group" style='display: flex; justify-content: center; align-items: center;'>
+          <button class="btn btn-default btn-large" onclick="termClicked()">
+            <span class="icon icon-monitor"></span>&nbsp;&nbsp;Term-Agent
+          </button>
+          <button class="btn btn-default btn-large" onclick="sshClicked()">
+            <span class="icon icon-monitor"></span>&nbsp;&nbsp;SSH
+          </button>
+          <button class="btn btn-default btn-large" onclick="sftpClicked()">
+            <span class="icon icon-folder"></span>&nbsp;&nbsp;SFTP
+          </button>
+          <button class="btn btn-default btn-large" onclick="rdpClicked()">
+            <span class="icon icon-monitor"></span>&nbsp;&nbsp;Remote Desktop
+          </button>
+        </div>
+        <p>Custom applications tunneling</p>
+        <div id="select_cmd_div" style="width:100%;height:100px; overflow-y:scroll"></div>
+        <div class="btn-group">
+          <button class="btn btn-default" onclick="cmdClicked()">
+            <span class="icon icon-monitor"></span>&nbsp;&nbsp;Connect
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="toolbar toolbar-footer">
+      <h1 class="title">This software is provided AS-IS, no implied warranty</h1>
+    </footer>
+  </div>
+</body>
+
+</html>

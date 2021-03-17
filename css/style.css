@@ -1,0 +1,12 @@
+.mini_icon_on {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;    
+}
+
+.mini_icon_off {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    filter: grayscale(100%);    
+}

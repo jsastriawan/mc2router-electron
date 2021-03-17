@@ -1,0 +1,9 @@
+{
+    "cmds" :
+    [ 
+        { "id": 1, "label": "VNC to port 5901", "cmdexec": "C:\\Program Files\\TightVNC\\tvnviewer.exe", "cmdargs" : "127.0.0.1::lport","cmdport":"5901"},
+        { "id": 2, "label": "VNC to port 5902", "cmdexec": "C:\\Program Files\\TightVNC\\tvnviewer.exe", "cmdargs" : "127.0.0.1::lport","cmdport":"5902"},
+        { "id": 3, "label": "VNC to port 5903", "cmdexec": "C:\\Program Files\\TightVNC\\tvnviewer.exe", "cmdargs" : "127.0.0.1::lport","cmdport":"5903"},
+        { "id": 4, "label": "SSH to port 22", "cmdexec": "C:\\Program Files\\PuTTY\\putty.exe", "cmdargs" : "-ssh 127.0.0.1 -P lport","cmdport":"22"}
+    ]
+}
