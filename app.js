@@ -46,7 +46,13 @@ function setPanel(number) {
 
 function loadCmds() {
     try {
-        var temp_obj = JSON.parse(fs.readFileSync("cmds.json"));
+        var platform = process.platform;        
+        var temp_obj = {}
+        if (fs.existsSync("cmds-"+platform+".json")) {
+            temp_obj = JSON.parse(fs.readFileSync("cmds-"+platform+".json"));
+        } else {
+            temp_obj = JSON.parse(fs.readFileSync("cmds.json"));
+        }
         if (temp_obj != null && temp_obj.cmds != null && temp_obj.cmds.length != null) {
             cmds = {};
             for (var j = 0; j < temp_obj.cmds.length; j++) {
@@ -840,7 +846,12 @@ function sftpClicked() {
 function rdpClicked() {
     var data = readForm();
     var exepath = data['rdp'];
-    var args = ['/v:127.0.0.1:lport'];
+    var args = []
+    if (process.platform == 'linux') {
+        args = ['127.0.0.1:lport'];
+    } else {
+        args = ['/v:127.0.0.1:lport'];
+    }
     var tunnelcfg = {
         nodeid: data["nodeidhex"],
         port: 3389

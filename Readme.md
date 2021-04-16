@@ -2,6 +2,11 @@
 
 An ElectronJS + Photonkit application to ease certain application tunneling via [Meshcentral 2](https://github.com/Ylianst/MeshCentral). 
 ## Dependencies
+Client software:
+- Putty
+- FileZilla
+- Microsoft Remote Desktop Client or rdesktop on Linux
+
 ElectronJS should be installed.
 ```
 npm i -g electron@latest
@@ -30,6 +35,7 @@ Create config.json file to store your configuration.
 }
 
 ```
+For Unix/Linux, please see config_template_linux.json.
 
 ## How to run
 ```
@@ -51,6 +57,8 @@ For more custom application tunneling, new command list JSON is added to add mul
     ]
 }
 ```
+For Linux, see cmds-linux.json
+
 Each entry need to have:
 * label: This will be used as the title
 * cmdexec: The path to binary/script to execute
