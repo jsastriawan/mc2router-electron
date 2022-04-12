@@ -811,7 +811,7 @@ function termClicked() {
             tunnelcfg["rauth"]=c.rcookie;
         }
         sendControlCommand(cmd, null, function (x) {
-            createPipeAndExec(exepath, args, [], tunnelcfg);
+            createPipeAndExec(exepath, args, {}, tunnelcfg);
         });
     });
 }
@@ -824,7 +824,7 @@ function sshClicked() {
         nodeid: data["nodeidhex"],
         port: 22
     };
-    createPipeAndExec(exepath, args, [], tunnelcfg);
+    createPipeAndExec(exepath, args, {}, tunnelcfg);
 }
 
 function sftpClicked() {
@@ -840,7 +840,7 @@ function sftpClicked() {
         port: 22
     };
     var args = ['--verbose', 'sftp://' + user + '@127.0.0.1:lport', '-l=ask'];
-    createPipeAndExec(exepath, args, [], tunnelcfg);
+    createPipeAndExec(exepath, args, {}, tunnelcfg);
 }
 
 function rdpClicked() {
@@ -856,7 +856,7 @@ function rdpClicked() {
         nodeid: data["nodeidhex"],
         port: 3389
     };
-    createPipeAndExec(exepath, args, [], tunnelcfg);
+    createPipeAndExec(exepath, args, {}, tunnelcfg);
 }
 
 function cmdClicked() {
@@ -875,5 +875,5 @@ function cmdClicked() {
         nodeid: data["nodeidhex"],
         port: cmds[cmd_id].cmdport
     };
-    createPipeAndExec(exepath, args, [], tunnelcfg);
+    createPipeAndExec(exepath, args, {}, tunnelcfg);
 }
