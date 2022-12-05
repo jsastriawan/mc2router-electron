@@ -42,6 +42,13 @@ For Unix/Linux, please see config_template_linux.json.
 > electron .
 ```
 
+or if you install electron as dependency, you should have electron in your node_modules
+
+```
+> node_modules\electron\dist\electron.exe .
+```
+
+
 ## Custom application tunnelling
 
 For more custom application tunneling, new command list JSON is added to add multiple list of application tunneling configurations.
